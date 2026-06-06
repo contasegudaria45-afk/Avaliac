@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Avaliação Profissional - Entrevistas</title>
+    <style>
+        /* === VARIÁVEIS DE COR E TIPOGRAFIA === */
+        :root {
+            --primary: #1a365d;
+            --primary-light: #2b6cb0;
+            --secondary: #edf2f7;
+            --text-dark: #2d3748;
+            --text-light: #718096;
+            --white: #ffffff;
+            --success: #38a169;
+            --danger: #e53e3e;
+            --border: #e2e8f0;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* === RESET E ESTILOS GLOBAIS === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: var(--font-main);
+        }
+
+        body {
+            background-color: var(--secondary);
+            color: var(--text-dark);
+            line-height: 1.6;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* === CLASSES ANTI-COLA (CSS) === */
+        .no-select {
+            -webkit-touch-callout: none; /* iOS Safari */
+            -webkit-user-select: none;   /* Safari */
+            -khtml-user-select: none;    /* Konqueror HTML */
+            -moz-user-select: none;      /* Old versions of Firefox */
+            -ms-user-select: none;       /* Internet Explorer/Edge */
+            user-select: none;           /* Non-prefixed version */
+        }
+
+        /* Permite seleção APENAS dentro dos inputs para facilitar correção de digitação manual */
+        input[type="text"], input[type="email"], textarea {
+            -webkit-user-select: text;
+            -moz-user-select: text;
+            -ms-user-select: text;
+            user-select: text;
+        }
+
+        /* === ESTRUTURA E LAYOUT === */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: var(--primary);
+            color: var(--white);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+
+        .card {
+            background-color: var(--white);
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            display: none; /* Controlado via JS */
+        }
+
+        .card.active {
+            display: block;
+            animation: fadeIn 0.4s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* === TIPOGRAFIA === */
+        h1, h2, h3 { color: var(--primary); margin-bottom: 15px; }
+        .header h1 { color: var(--white); }
+        p { margin-bottom: 15px; color: var(--text-dark); }
+        .text-center { text-align: center; }
+
+        /* === FORMULÁRIOS E BOTÕES === */
+        .form-group { margin-bottom: 20px; }
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+        
+        input[type="text"], input[type="email"], input[type="password"], textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+            background-color: #fafafa;
+        }
+
+        input:focus, textarea:focus {
+            outline: none;
+            border-color: var(--primary-light);
+            background-color: var(--white);
+        }
+
+        textarea { resize: vertical; min-height: 100px; }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--primary-light);
+            color: var(--white);
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s;
+            text-align: center;
+        }
+
+        .btn:hover { background-color: var(--primary); }
+        .btn:active { transform: scale(0.98); }
+        .btn-block { width: 100%; margin-top: 10px; }
+        .btn-outline { background-color: transparent; border: 2px solid var(--primary-light); color: var(--primary-light); }
+        .btn-outline:hover { background-color: var(--primary-light); color: var(--white); }
+        .btn-success { background-color: var(--success); }
+        .btn-danger { background-color: var(--danger); }
+        .btn-sm { padding: 6px 12px; font-size: 14px; }
+
+        .btn-group { display: flex; gap: 15px; justify-content: center; margin-top: 20px; }
+
+        /* === QUESTÕES === */
+        .question-block {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        .question-block:last-child { border-bottom: none; }
+        
+        .options-group label {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-weight: normal;
+            color: var(--text-dark);
+        }
+        .options-group label:hover { background-color: var(--secondary); }
+        .options-group input[type="radio"] { margin-right: 10px; transform: scale(1.2); }
+
+        /* === TABELA ADMIN === */
+        .table-responsive { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
+        th { background-color: var(--primary); color: var(--white); }
+        tr:hover { background-color: var(--secondary); }
+        
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            text-transform: uppercase;
+        }
+        .status-pendente { background-color: #ecc94b; color: #744210; }
+        .status-aprovado { background-color: var(--success); }
+        .status-reprovado { background-color: var(--danger); }
+
+        .answer-details {
+            display: none;
+            background-color: #fafafa;
+            padding: 15px;
+            border-left: 4px solid var(--primary-light);
+            margin-top: 10px;
+            font-size: 14px;
+        }
+
+        /* === MODAL ANTI-COLA === */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .modal-overlay.active { visibility: visible; opacity: 1; }
+        .modal-content {
+            background-color: var(--white);
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            max-width: 400px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            border-top: 5px solid var(--danger);
+        }
+        .modal-icon { font-size: 40px; color: var(--danger); margin-bottom: 15px; }
+
+        /* Media Queries */
+        @media (max-width: 600px) {
+            .btn-group { flex-direction: column; }
+            .card { padding: 20px; }
+        }
+    </style>
+</head>
+<body class="no-select"> <div class="container">
+        <div class="header">
+            <h1>O Que Fazer em Uma Entrevista de Emprego</h1>
+            <p>Sistema de Avaliação Profissional</p>
+        </div>
+
+        <div id="screen-home" class="card active">
+            <h2 class="text-center">Bem-vindo(a)</h2>
+            <p class="text-center">Selecione o seu perfil de acesso abaixo:</p>
+            <div class="btn-group">
+                <button class="btn" onclick="showScreen('screen-candidate-login')">Área do Candidato</button>
+                <button class="btn btn-outline" onclick="showScreen('screen-admin-login')">Painel do Administrador</button>
+            </div>
+        </div>
+
+        <div id="screen-candidate-login" class="card">
+            <h2>Identificação do Candidato</h2>
+            <p>Preencha seus dados para iniciar a avaliação. <strong>Atenção:</strong> Nosso sistema possui proteção avançada antifraude.</p>
+            <form id="form-candidate-login" onsubmit="startAssessment(event)">
+                <div class="form-group">
+                    <label>Nome Completo:</label>
+                    <input type="text" id="cand-name" required autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" onpaste="return false;" ondrop="return false;">
+                </div>
+                <div class="form-group">
+                    <label>E-mail:</label>
+                    <input type="email" id="cand-email" required autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" onpaste="return false;" ondrop="return false;">
+                </div>
+                <button type="submit" class="btn btn-block">Iniciar Teste</button>
+                <button type="button" class="btn btn-outline btn-block" onclick="showScreen('screen-home')">Voltar</button>
+            </form>
+        </div>
+
+        <div id="screen-assessment" class="card">
+            <h2>Formulário de Avaliação</h2>
+            <p>Responda às 10 perguntas abaixo. Lembre-se: é proibido copiar e colar respostas ou utilizar atalhos do sistema.</p>
+            <form id="form-assessment" onsubmit="submitAssessment(event)">
+                <div id="questions-container">
+                    </div>
+                <button type="submit" class="btn btn-success btn-block" style="margin-top: 30px; font-size: 18px;">Enviar Respostas</button>
+            </form>
+        </div>
+
+        <div id="screen-success" class="card text-center">
+            <h2 style="color: var(--success);">Avaliação Enviada!</h2>
+            <p>Suas respostas foram salvas com sucesso. Aguarde o retorno do recrutador.</p>
+            <button class="btn" onclick="window.location.reload()">Voltar ao Início</button>
+        </div>
+
+        <div id="screen-admin-login" class="card">
+            <h2>Acesso Restrito</h2>
+            <p>Insira a senha do administrador para visualizar os resultados.</p>
+            <form onsubmit="adminLogin(event)">
+                <div class="form-group">
+                    <label>Senha:</label>
+                    <input type="password" id="admin-password" required>
+                </div>
+                <button type="submit" class="btn btn-block">Acessar Painel</button>
+                <button type="button" class="btn btn-outline btn-block" onclick="showScreen('screen-home')">Voltar</button>
+                <p id="admin-error" style="color: var(--danger); margin-top: 10px; display: none;">Senha incorreta.</p>
+            </form>
+        </div>
+
+        <div id="screen-admin-dashboard" class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h2>Painel do Administrador</h2>
+                <button class="btn btn-outline btn-sm" onclick="logoutAdmin()">Sair</button>
+            </div>
+            
+            <div class="table-responsive">
+                <table id="admin-table">
+                    <thead>
+                        <tr>
+                            <th>Candidato</th>
+                            <th>E-mail</th>
+                            <th>Status</th>
+                            <th>Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="admin-tbody">
+                        </tbody>
+                </table>
+            </div>
+            <p id="no-data-msg" style="text-align: center; margin-top: 20px; color: var(--text-light); display: none;">Nenhuma avaliação enviada ainda.</p>
+        </div>
+    </div>
+
+    <div id="anti-cheat-modal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-icon">⚠️</div>
+            <h3 style="color: var(--danger);">Ação Bloqueada!</h3>
+            <p>Digite sua resposta manualmente para garantir a autenticidade do teste. Uso de copiar/colar, seleções e atalhos estão desativados.</p>
+            <button class="btn btn-danger" onclick="closeAntiCheatModal()" style="margin-top: 15px;">Entendi</button>
+        </div>
+    </div>
+
+    <script>
+        /* ==========================================================================
+           BANCO DE QUESTÕES
+           ========================================================================== */
+        const questions = [
+            {
+                id: 'q1',
+                type: 'discursive',
+                text: "Como você deve responder à pergunta: 'Qual é o seu maior defeito?'"
+            },
+            {
+                id: 'q2',
+                type: 'multiple',
+                text: "Se o recrutador perguntar por que você saiu do seu último emprego, o que NUNCA deve ser dito?",
+                options: [
+                    "A) Estava em busca de novos desafios e plano de carreira.",
+                    "B) Fui afetado por uma reestruturação geral na empresa.",
+                    "C) Meu antigo chefe era incompetente e a empresa não prestava.",
+                    "D) A cultura da empresa não estava alinhada com meus objetivos profissionais."
+                ]
+            },
+            {
+                id: 'q3',
+                type: 'discursive',
+                text: "Qual a postura ideal de vestimenta e linguagem corporal em uma entrevista online?"
+            },
+            {
+                id: 'q4',
+                type: 'multiple',
+                text: "Qual a melhor forma de encerrar uma entrevista de emprego?",
+                options: [
+                    "A) Levantar rapidamente e sair assim que o recrutador parar de falar.",
+                    "B) Agradecer pela oportunidade, fazer perguntas pertinentes e alinhar os próximos passos.",
+                    "C) Perguntar imediatamente qual será o salário e os dias de férias.",
+                    "D) Pedir um feedback imediato se passou ou não."
+                ]
+            },
+            {
+                id: 'q5',
+                type: 'discursive',
+                text: "Explique por que fazer perguntas ao recrutador no final da entrevista demonstra interesse e preparo."
+            },
+            {
+                id: 'q6',
+                type: 'multiple',
+                text: "Como você deve se preparar no dia anterior à entrevista?",
+                options: [
+                    "A) Pesquisar sobre a empresa, reler o currículo e estudar as exigências da vaga.",
+                    "B) Improvisar completamente para parecer mais natural e espontâneo.",
+                    "C) Apenas imprimir várias cópias do currículo e não ler nada.",
+                    "D) Mandar mensagem nas redes sociais pessoais do recrutador para se destacar."
+                ]
+            },
+            {
+                id: 'q7',
+                type: 'discursive',
+                text: "Descreva como você lidaria se percebesse que não sabe a resposta para uma pergunta técnica durante a entrevista."
+            },
+            {
+                id: 'q8',
+                type: 'multiple',
+                text: "Ao ser questionado sobre suas conquistas passadas, qual técnica de resposta é a mais recomendada?",
+                options: [
+                    "A) Método Improviso Geral.",
+                    "B) Método STAR (Situação, Tarefa, Ação, Resultado).",
+                    "C) Contar a história focando apenas no que a equipe fez, omitindo seu papel.",
+                    "D) Evitar falar de conquistas para não parecer arrogante."
+                ]
+            },
+            {
+                id: 'q9',
+                type: 'discursive',
+                text: "Como você articula uma falha ou erro do passado para que pareça uma oportunidade de aprendizado na visão do recrutador?"
+            },
+            {
+                id: 'q10',
+                type: 'multiple',
+                text: "Qual é o principal objetivo do recrutador ao perguntar: 'Onde você se vê em 5 anos?'",
+                options: [
+                    "A) Calcular a sua idade exata no futuro.",
+                    "B) Garantir que você não vai pedir aumento nesse período.",
+                    "C) Avaliar seu alinhamento a longo prazo com a empresa e suas ambições.",
+                    "D) Testar se você é capaz de prever o futuro do mercado."
+                ]
+            }
+        ];
+
+        /* ==========================================================================
+           LÓGICA DE ESTADO E ARMAZENAMENTO (LocalStorage)
+           ========================================================================== */
+        const DB_KEY = 'assessments_db';
+        let currentCandidate = { name: '', email: '' };
+
+        function getAssessments() {
+            return JSON.parse(localStorage.getItem(DB_KEY)) || [];
+        }
+
+        function saveAssessment(assessment) {
+            const data = getAssessments();
+            // Evita duplicidade se o email tentar enviar de novo (sobrescreve)
+            const existingIndex = data.findIndex(a => a.email === assessment.email);
+            if(existingIndex >= 0) {
+                data[existingIndex] = assessment;
+            } else {
+                data.push(assessment);
+            }
+            localStorage.setItem(DB_KEY, JSON.stringify(data));
+        }
+
+        function updateAssessmentStatus(email, newStatus) {
+            const data = getAssessments();
+            const index = data.findIndex(a => a.email === email);
+            if(index >= 0) {
+                data[index].status = newStatus;
+                localStorage.setItem(DB_KEY, JSON.stringify(data));
+                loadAdminDashboard(); // Recarrega a tabela
+            }
+        }
+
+        /* ==========================================================================
+           CONTROLE DE TELAS (UI)
+           ========================================================================== */
+        function showScreen(screenId) {
+            document.querySelectorAll('.card').forEach(card => {
+                card.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+            window.scrollTo(0,0);
+        }
+
+        /* ==========================================================================
+           SISTEMA ANTI-COLA ULTRA ROBUSTO
+           ========================================================================== */
+        function triggerAntiCheatWarning() {
+            document.getElementById('anti-cheat-modal').classList.add('active');
+        }
+
+        function closeAntiCheatModal() {
+            document.getElementById('anti-cheat-modal').classList.remove('active');
+        }
+
+        // 1. Bloqueio de Clique Direito (Menu de Contexto)
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            triggerAntiCheatWarning();
+        });
+
+        // 2. Bloqueio de Atalhos de Teclado (Ctrl+C, Ctrl+V, F12, etc)
+        document.addEventListener('keydown', function(e) {
+            // F12
+            if (e.key === 'F12') {
+                e.preventDefault();
+                triggerAntiCheatWarning();
+            }
+            // Ctrl/Cmd + C, V, X, U, P, S
+            if ((e.ctrlKey || e.metaKey) && ['c', 'v', 'x', 'u', 'p', 's'].includes(e.key.toLowerCase())) {
+                e.preventDefault();
+                triggerAntiCheatWarning();
+            }
+        });
+
+        // 3. Monitoramento de Injeção de Texto (Teclado Mobile e Colar Forçado)
+        function applyAntiCheatToInput(inputElement) {
+            let previousValue = inputElement.value;
+            
+            inputElement.addEventListener('focus', function() {
+                previousValue = this.value;
+            });
+
+            inputElement.addEventListener('input', function(e) {
+                // Se o texto aumentar mais de 2 caracteres instantaneamente, é cola/autocomplete injetado
+                if (this.value.length - previousValue.length > 2) {
+                    this.value = previousValue; // Reverte imediatamente
+                    triggerAntiCheatWarning();
+                } else {
+                    previousValue = this.value; // Atualiza se for digitação normal
+                }
+            });
+        }
+
+        /* ==========================================================================
+           FLUXO DO CANDIDATO
+           ========================================================================== */
+        function renderQuestions() {
+            const container = document.getElementById('questions-container');
+            container.innerHTML = '';
+
+            questions.forEach((q, index) => {
+                const qBlock = document.createElement('div');
+                qBlock.className = 'question-block';
+                
+                let html = `<h3>Questão ${index + 1}</h3><p>${q.text}</p>`;
+                
+                if (q.type === 'multiple') {
+                    html += `<div class="options-group">`;
+                    q.options.forEach((opt, optIdx) => {
+                        html += `
+                            <label>
+                                <input type="radio" name="${q.id}" value="${opt[0]}" required>
+                                ${opt}
+                            </label>
+                        `;
+                    });
+                    html += `</div>`;
+                } else {
+                    // Atributos base de anti-preenchimento
+                    html += `
+                        <textarea name="${q.id}" required 
+                            autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" 
+                            onpaste="return false;" ondrop="return false;"
+                            placeholder="Digite sua resposta detalhada aqui..."></textarea>
+                    `;
+                }
+                
+                qBlock.innerHTML = html;
+                container.appendChild(qBlock);
+            });
+
+            // Aplica regra de injeção aos textareas recém-criados
+            document.querySelectorAll('textarea').forEach(applyAntiCheatToInput);
+        }
+
+        function startAssessment(e) {
+            e.preventDefault();
+            currentCandidate.name = document.getElementById('cand-name').value.trim();
+            currentCandidate.email = document.getElementById('cand-email').value.trim();
+            
+            renderQuestions();
+            showScreen('screen-assessment');
+        }
+
+        function submitAssessment(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const answers = [];
+            
+            questions.forEach(q => {
+                answers.push({
+                    questionId: q.id,
+                    questionText: q.text,
+                    answer: formData.get(q.id)
+                });
+            });
+
+            const assessment = {
+                name: currentCandidate.name,
+                email: currentCandidate.email,
+                date: new Date().toLocaleString('pt-BR'),
+                answers: answers,
+                status: 'pendente' // pendente, aprovado, reprovado
+            };
+
+            saveAssessment(assessment);
+            showScreen('screen-success');
+        }
+
+        /* ==========================================================================
+           FLUXO DO ADMINISTRADOR
+           ========================================================================== */
+        function adminLogin(e) {
+            e.preventDefault();
+            const pass = document.getElementById('admin-password').value;
+            if (pass === 'admin123') {
+                document.getElementById('admin-password').value = '';
+                document.getElementById('admin-error').style.display = 'none';
+                loadAdminDashboard();
+                showScreen('screen-admin-dashboard');
+            } else {
+                document.getElementById('admin-error').style.display = 'block';
+            }
+        }
+
+        function logoutAdmin() {
+            showScreen('screen-home');
+        }
+
+        function toggleAnswerDetails(emailId) {
+            const el = document.getElementById('details-' + emailId);
+            if(el.style.display === 'block') {
+                el.style.display = 'none';
+            } else {
+                el.style.display = 'block';
+            }
+        }
+
+        function loadAdminDashboard() {
+            const data = getAssessments();
+            const tbody = document.getElementById('admin-tbody');
+            const noDataMsg = document.getElementById('no-data-msg');
+            const table = document.getElementById('admin-table');
+            
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                table.style.display = 'none';
+                noDataMsg.style.display = 'block';
+                return;
+            }
+
+            table.style.display = 'table';
+            noDataMsg.style.display = 'none';
+
+            data.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                const safeEmailId = item.email.replace(/[^a-zA-Z0-9]/g, ''); // Para ID seguro
+                
+                // Formatação do Status
+                let statusClass = 'status-pendente';
+                let statusLabel = 'Pendente';
+                if(item.status === 'aprovado') { statusClass = 'status-aprovado'; statusLabel = 'Aprovado'; }
+                if(item.status === 'reprovado') { statusClass = 'status-reprovado'; statusLabel = 'Reprovado'; }
+
+                // Montagem das respostas para expansão
+                let answersHtml = `<div id="details-${safeEmailId}" class="answer-details">
+                                     <strong>Data de Envio:</strong> ${item.date}<br><br>`;
+                item.answers.forEach((ans, i) => {
+                    answersHtml += `<strong>Q${i+1}:</strong> ${ans.questionText}<br>
+                                    <span style="color:var(--primary-light)">R: ${ans.answer}</span><br><br>`;
+                });
+                answersHtml += `</div>`;
+
+                tr.innerHTML = `
+                    <td>
+                        <strong>${item.name}</strong><br>
+                        <button class="btn btn-outline btn-sm" style="margin-top:5px; padding: 2px 8px; font-size:12px;" onclick="toggleAnswerDetails('${safeEmailId}')">Ver Respostas</button>
+                        ${answersHtml}
+                    </td>
+                    <td>${item.email}</td>
+                    <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
+                    <td>
+                        <button class="btn btn-success btn-sm" onclick="updateAssessmentStatus('${item.email}', 'aprovado')">Aprovar</button>
+                        <button class="btn btn-danger btn-sm" onclick="updateAssessmentStatus('${item.email}', 'reprovado')">Reprovar</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Aplica o monitor de input na tela de login de candidato também
+        document.addEventListener('DOMContentLoaded', () => {
+            applyAntiCheatToInput(document.getElementById('cand-name'));
+            applyAntiCheatToInput(document.getElementById('cand-email'));
+        });
+
+    </script>
+</body>
+</html>
