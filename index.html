@@ -1,675 +1,962 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Avaliação Profissional - Entrevistas</title>
-    <style>
-        /* === VARIÁVEIS DE COR E TIPOGRAFIA === */
-        :root {
-            --primary: #1a365d;
-            --primary-light: #2b6cb0;
-            --secondary: #edf2f7;
-            --text-dark: #2d3748;
-            --text-light: #718096;
-            --white: #ffffff;
-            --success: #38a169;
-            --danger: #e53e3e;
-            --border: #e2e8f0;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --font-main: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Recrutamento — Família Obolivon</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-deep: #0e0e0e;
+    --bg-main: #121212;
+    --bg-card: #1a1a1a;
+    --bg-card2: #161616;
+    --gold: #9c7a3c;
+    --gold-light: #c9a44a;
+    --gold-dim: #5a4520;
+    --crimson: #8b1a1a;
+    --crimson-light: #a82020;
+    --crimson-glow: #c0392b;
+    --parchment: #e6dfd3;
+    --parchment-dim: #b5aa98;
+    --border: 1px solid #9c7a3c;
+    --radius: 4px;
+    --alert-red: #ff2222;
+  }
 
-        /* === RESET E ESTILOS GLOBAIS === */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: var(--font-main);
-        }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        body {
-            background-color: var(--secondary);
-            color: var(--text-dark);
-            line-height: 1.6;
-            -webkit-tap-highlight-color: transparent;
-        }
+  body {
+    background-color: var(--bg-main);
+    background-image:
+      radial-gradient(ellipse at 20% 0%, rgba(139,26,26,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 100%, rgba(156,122,60,0.06) 0%, transparent 60%),
+      url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%239c7a3c' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    color: var(--parchment);
+    font-family: 'IM Fell English', serif;
+    min-height: 100vh;
+    padding-bottom: 60px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
 
-        /* === CLASSES ANTI-COLA (CSS) === */
-        .no-select {
-            -webkit-touch-callout: none; /* iOS Safari */
-            -webkit-user-select: none;   /* Safari */
-            -khtml-user-select: none;    /* Konqueror HTML */
-            -moz-user-select: none;      /* Old versions of Firefox */
-            -ms-user-select: none;       /* Internet Explorer/Edge */
-            user-select: none;           /* Non-prefixed version */
-        }
+  /* ── HEADER ── */
+  .site-header {
+    text-align: center;
+    padding: 40px 20px 20px;
+    position: relative;
+  }
+  .site-header::after {
+    content: '';
+    display: block;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), var(--crimson), var(--gold), transparent);
+    margin-top: 24px;
+  }
+  .shield-wrap {
+    display: inline-block;
+    position: relative;
+  }
+  .shield-wrap::before,
+  .shield-wrap::after {
+    content: '⚔';
+    font-size: 2rem;
+    color: var(--gold);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.7;
+    text-shadow: 0 0 12px rgba(156,122,60,0.5);
+  }
+  .shield-wrap::before { right: calc(100% + 16px); }
+  .shield-wrap::after  { left:  calc(100% + 16px); transform: translateY(-50%) scaleX(-1); }
+  .clan-logo {
+    width: 160px;
+    height: 160px;
+    object-fit: contain;
+    border-radius: 50%;
+    border: 3px solid var(--gold);
+    box-shadow: 0 0 30px rgba(156,122,60,0.3), 0 0 60px rgba(139,26,26,0.2);
+    filter: drop-shadow(0 4px 16px rgba(0,0,0,0.8));
+  }
+  .clan-title {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: clamp(1.4rem, 5vw, 2.4rem);
+    color: var(--gold-light);
+    text-shadow: 0 0 20px rgba(156,122,60,0.5), 2px 2px 4px rgba(0,0,0,0.8);
+    margin-top: 16px;
+    letter-spacing: 3px;
+  }
+  .clan-subtitle {
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    color: var(--parchment-dim);
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    margin-top: 6px;
+  }
+  .rune-deco {
+    font-size: 1.2rem;
+    color: var(--gold-dim);
+    letter-spacing: 8px;
+    margin-top: 10px;
+    opacity: 0.7;
+  }
 
-        /* Permite seleção APENAS dentro dos inputs para facilitar correção de digitação manual */
-        input[type="text"], input[type="email"], textarea {
-            -webkit-user-select: text;
-            -moz-user-select: text;
-            -ms-user-select: text;
-            user-select: text;
-        }
+  /* ── TABS ── */
+  .tab-container {
+    max-width: 780px;
+    margin: 30px auto 0;
+    padding: 0 16px;
+  }
+  .tab-nav {
+    display: flex;
+    border-bottom: 2px solid var(--gold-dim);
+    margin-bottom: 0;
+  }
+  .tab-btn {
+    flex: 1;
+    padding: 14px 10px;
+    background: var(--bg-card2);
+    border: 1px solid var(--gold-dim);
+    border-bottom: none;
+    color: var(--parchment-dim);
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s;
+    text-transform: uppercase;
+  }
+  .tab-btn:first-child { border-right: none; }
+  .tab-btn.active {
+    background: var(--crimson);
+    color: var(--parchment);
+    border-color: var(--gold);
+    text-shadow: 0 0 10px rgba(224,224,224,0.3);
+  }
+  .tab-btn:hover:not(.active) {
+    background: rgba(139,26,26,0.2);
+    color: var(--parchment);
+  }
 
-        /* === ESTRUTURA E LAYOUT === */
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
-        }
+  /* ── CARDS ── */
+  .card {
+    background: var(--bg-card);
+    border: var(--border);
+    border-top: 3px solid var(--gold);
+    padding: 30px 24px;
+    display: none;
+  }
+  .card.active { display: block; }
 
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-            padding: 20px;
-            background-color: var(--primary);
-            color: var(--white);
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-        }
+  /* ── SECTION TITLE ── */
+  .section-title {
+    font-family: 'Cinzel', serif;
+    font-size: 1rem;
+    color: var(--gold-light);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--gold-dim);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title .icon { font-size: 1.2rem; }
 
-        .card {
-            background-color: var(--white);
-            border-radius: 8px;
-            padding: 30px;
-            box-shadow: var(--shadow);
-            margin-bottom: 20px;
-            display: none; /* Controlado via JS */
-        }
+  /* ── INPUTS ── */
+  .field-group { margin-bottom: 22px; }
+  label {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.78rem;
+    color: var(--gold-light);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  label .req { color: var(--crimson-glow); margin-left: 4px; }
+  input[type="text"],
+  input[type="email"],
+  input[type="number"],
+  textarea,
+  select {
+    width: 100%;
+    background: #0f0f0f;
+    border: 1px solid var(--gold-dim);
+    border-radius: var(--radius);
+    color: var(--parchment);
+    font-family: 'IM Fell English', serif;
+    font-size: 1rem;
+    padding: 12px 14px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    outline: none;
+    -webkit-user-select: text;
+    user-select: text;
+  }
+  input[type="text"]:focus,
+  input[type="email"]:focus,
+  input[type="number"]:focus,
+  textarea:focus,
+  select:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 12px rgba(156,122,60,0.2);
+  }
+  textarea { resize: vertical; min-height: 160px; }
+  select { cursor: pointer; }
+  select option { background: #1a1a1a; }
 
-        .card.active {
-            display: block;
-            animation: fadeIn 0.4s ease-in-out;
-        }
+  .char-counter {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    color: var(--parchment-dim);
+    text-align: right;
+    margin-top: 5px;
+    letter-spacing: 1px;
+  }
+  .char-counter.warn { color: var(--crimson-glow); }
+  .char-counter.ok   { color: #4caf50; }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+  /* ── ALERT BANNER ── */
+  .alert-banner {
+    display: none;
+    background: rgba(139,26,26,0.15);
+    border: 2px solid var(--alert-red);
+    border-radius: var(--radius);
+    color: var(--alert-red);
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 1px;
+    padding: 12px 16px;
+    margin-bottom: 20px;
+    text-align: center;
+    animation: pulse-alert 1s ease-in-out infinite;
+  }
+  .alert-banner.show { display: block; }
+  @keyframes pulse-alert {
+    0%,100% { box-shadow: 0 0 8px rgba(255,34,34,0.4); }
+    50%      { box-shadow: 0 0 20px rgba(255,34,34,0.8); }
+  }
 
-        /* === TIPOGRAFIA === */
-        h1, h2, h3 { color: var(--primary); margin-bottom: 15px; }
-        .header h1 { color: var(--white); }
-        p { margin-bottom: 15px; color: var(--text-dark); }
-        .text-center { text-align: center; }
+  /* ── RADIO OPTIONS ── */
+  .radio-group { display: flex; gap: 20px; flex-wrap: wrap; }
+  .radio-opt {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    color: var(--parchment);
+    padding: 10px 20px;
+    border: 1px solid var(--gold-dim);
+    border-radius: var(--radius);
+    transition: all 0.3s;
+  }
+  .radio-opt:hover { border-color: var(--gold); background: rgba(156,122,60,0.05); }
+  .radio-opt input { accent-color: var(--crimson); }
+  .radio-opt.selected { border-color: var(--gold); background: rgba(139,26,26,0.15); }
 
-        /* === FORMULÁRIOS E BOTÕES === */
-        .form-group { margin-bottom: 20px; }
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 8px;
-            color: var(--primary);
-        }
-        
-        input[type="text"], input[type="email"], input[type="password"], textarea {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            font-size: 16px;
-            transition: border-color 0.3s;
-            background-color: #fafafa;
-        }
+  /* ── DIVIDER ── */
+  .rune-divider {
+    text-align: center;
+    color: var(--gold-dim);
+    font-size: 0.9rem;
+    letter-spacing: 10px;
+    margin: 28px 0;
+    opacity: 0.6;
+  }
 
-        input:focus, textarea:focus {
-            outline: none;
-            border-color: var(--primary-light);
-            background-color: var(--white);
-        }
+  /* ── BUTTONS ── */
+  .btn-primary {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--crimson), #6b1111);
+    border: 2px solid var(--gold);
+    border-radius: var(--radius);
+    color: var(--parchment);
+    font-family: 'Cinzel', serif;
+    font-size: 0.95rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+    margin-top: 10px;
+  }
+  .btn-primary::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.07), transparent);
+    transition: left 0.5s;
+  }
+  .btn-primary:hover::before { left: 100%; }
+  .btn-primary:hover {
+    background: linear-gradient(135deg, var(--crimson-light), var(--crimson));
+    box-shadow: 0 0 20px rgba(139,26,26,0.5), 0 0 40px rgba(139,26,26,0.2);
+    transform: translateY(-1px);
+  }
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+  .btn-secondary {
+    padding: 12px 24px;
+    background: transparent;
+    border: 1px solid var(--gold-dim);
+    border-radius: var(--radius);
+    color: var(--parchment-dim);
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .btn-secondary:hover {
+    border-color: var(--gold);
+    color: var(--parchment);
+  }
 
-        textarea { resize: vertical; min-height: 100px; }
+  /* ── STATUS DISPLAY ── */
+  .status-card {
+    display: none;
+    margin-top: 24px;
+    padding: 24px;
+    border-radius: var(--radius);
+    text-align: center;
+    animation: fadeIn 0.5s ease;
+  }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:none; } }
+  .status-card.pending {
+    background: rgba(156,122,60,0.1);
+    border: 2px solid var(--gold-dim);
+  }
+  .status-card.approved {
+    background: rgba(26,100,26,0.15);
+    border: 2px solid #2e7d32;
+  }
+  .status-card.rejected {
+    background: rgba(139,26,26,0.15);
+    border: 2px solid var(--crimson);
+  }
+  .status-card .status-icon { font-size: 3rem; margin-bottom: 12px; }
+  .status-card .status-label {
+    font-family: 'Cinzel', serif;
+    font-size: 1.2rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+  }
+  .status-card.approved .status-label { color: #4caf50; }
+  .status-card.rejected .status-label { color: var(--crimson-glow); }
+  .status-card.pending .status-label  { color: var(--gold-light); }
+  .status-card .status-note {
+    font-size: 0.9rem;
+    color: var(--parchment-dim);
+    margin-top: 8px;
+  }
+  .status-card .status-score {
+    font-family: 'Cinzel Decorative', cursive;
+    font-size: 2rem;
+    color: var(--gold-light);
+    margin-top: 10px;
+  }
 
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: var(--primary-light);
-            color: var(--white);
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.1s;
-            text-align: center;
-        }
+  /* ── TOAST ── */
+  #toast {
+    position: fixed;
+    bottom: 30px; left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: var(--bg-card);
+    border: var(--border);
+    border-top: 3px solid var(--gold);
+    padding: 14px 24px;
+    border-radius: var(--radius);
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    color: var(--parchment);
+    letter-spacing: 2px;
+    z-index: 9999;
+    transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+    max-width: 90vw;
+    text-align: center;
+  }
+  #toast.show { transform: translateX(-50%) translateY(0); }
+  #toast.success { border-top-color: #4caf50; }
+  #toast.error   { border-top-color: var(--crimson); }
 
-        .btn:hover { background-color: var(--primary); }
-        .btn:active { transform: scale(0.98); }
-        .btn-block { width: 100%; margin-top: 10px; }
-        .btn-outline { background-color: transparent; border: 2px solid var(--primary-light); color: var(--primary-light); }
-        .btn-outline:hover { background-color: var(--primary-light); color: var(--white); }
-        .btn-success { background-color: var(--success); }
-        .btn-danger { background-color: var(--danger); }
-        .btn-sm { padding: 6px 12px; font-size: 14px; }
+  /* ── LOADING OVERLAY ── */
+  #overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 9998;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 16px;
+  }
+  #overlay.show { display: flex; }
+  .spinner {
+    width: 50px; height: 50px;
+    border: 3px solid var(--gold-dim);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #overlay p {
+    font-family: 'Cinzel', serif;
+    color: var(--gold-light);
+    letter-spacing: 3px;
+    font-size: 0.85rem;
+  }
 
-        .btn-group { display: flex; gap: 15px; justify-content: center; margin-top: 20px; }
+  /* ── FORM SECTION HEADERS ── */
+  .q-num {
+    display: inline-block;
+    background: var(--crimson);
+    color: var(--parchment);
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    padding: 3px 10px;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
 
-        /* === QUESTÕES === */
-        .question-block {
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid var(--border);
-        }
-        .question-block:last-child { border-bottom: none; }
-        
-        .options-group label {
-            display: flex;
-            align-items: center;
-            padding: 10px;
-            border: 1px solid var(--border);
-            border-radius: 6px;
-            margin-bottom: 8px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-            font-weight: normal;
-            color: var(--text-dark);
-        }
-        .options-group label:hover { background-color: var(--secondary); }
-        .options-group input[type="radio"] { margin-right: 10px; transform: scale(1.2); }
+  /* ── DISCLAIMER ── */
+  .disclaimer {
+    background: rgba(139,26,26,0.08);
+    border: 1px solid rgba(139,26,26,0.3);
+    border-radius: var(--radius);
+    padding: 14px;
+    font-size: 0.85rem;
+    color: var(--parchment-dim);
+    font-style: italic;
+    margin-bottom: 28px;
+    line-height: 1.7;
+  }
 
-        /* === TABELA ADMIN === */
-        .table-responsive { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
-        th, td { padding: 12px; text-align: left; border-bottom: 1px solid var(--border); }
-        th { background-color: var(--primary); color: var(--white); }
-        tr:hover { background-color: var(--secondary); }
-        
-        .status-badge {
-            padding: 4px 8px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: bold;
-            color: white;
-            text-transform: uppercase;
-        }
-        .status-pendente { background-color: #ecc94b; color: #744210; }
-        .status-aprovado { background-color: var(--success); }
-        .status-reprovado { background-color: var(--danger); }
-
-        .answer-details {
-            display: none;
-            background-color: #fafafa;
-            padding: 15px;
-            border-left: 4px solid var(--primary-light);
-            margin-top: 10px;
-            font-size: 14px;
-        }
-
-        /* === MODAL ANTI-COLA === */
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(0,0,0,0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            visibility: hidden;
-            opacity: 0;
-            transition: opacity 0.3s;
-        }
-        .modal-overlay.active { visibility: visible; opacity: 1; }
-        .modal-content {
-            background-color: var(--white);
-            padding: 30px;
-            border-radius: 8px;
-            text-align: center;
-            max-width: 400px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            border-top: 5px solid var(--danger);
-        }
-        .modal-icon { font-size: 40px; color: var(--danger); margin-bottom: 15px; }
-
-        /* Media Queries */
-        @media (max-width: 600px) {
-            .btn-group { flex-direction: column; }
-            .card { padding: 20px; }
-        }
-    </style>
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .shield-wrap::before, .shield-wrap::after { display: none; }
+    .clan-logo { width: 120px; height: 120px; }
+    .card { padding: 20px 14px; }
+    .radio-group { flex-direction: column; }
+  }
+</style>
 </head>
-<body class="no-select"> <div class="container">
-        <div class="header">
-            <h1>O Que Fazer em Uma Entrevista de Emprego</h1>
-            <p>Sistema de Avaliação Profissional</p>
-        </div>
+<body>
 
-        <div id="screen-home" class="card active">
-            <h2 class="text-center">Bem-vindo(a)</h2>
-            <p class="text-center">Selecione o seu perfil de acesso abaixo:</p>
-            <div class="btn-group">
-                <button class="btn" onclick="showScreen('screen-candidate-login')">Área do Candidato</button>
-                <button class="btn btn-outline" onclick="showScreen('screen-admin-login')">Painel do Administrador</button>
-            </div>
-        </div>
+<!-- ALERT ANTI-COLA -->
+<div class="alert-banner" id="antiColaAlert">
+  ⚠ AÇÃO BLOQUEADA! Digite sua resposta manualmente. O uso de IA ou textos copiados gera desclassificação direta.
+</div>
 
-        <div id="screen-candidate-login" class="card">
-            <h2>Identificação do Candidato</h2>
-            <p>Preencha seus dados para iniciar a avaliação. <strong>Atenção:</strong> Nosso sistema possui proteção avançada antifraude.</p>
-            <form id="form-candidate-login" onsubmit="startAssessment(event)">
-                <div class="form-group">
-                    <label>Nome Completo:</label>
-                    <input type="text" id="cand-name" required autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" onpaste="return false;" ondrop="return false;">
-                </div>
-                <div class="form-group">
-                    <label>E-mail:</label>
-                    <input type="email" id="cand-email" required autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" onpaste="return false;" ondrop="return false;">
-                </div>
-                <button type="submit" class="btn btn-block">Iniciar Teste</button>
-                <button type="button" class="btn btn-outline btn-block" onclick="showScreen('screen-home')">Voltar</button>
-            </form>
-        </div>
+<!-- HEADER -->
+<header class="site-header">
+  <div class="shield-wrap">
+    <img
+      class="clan-logo"
+      src="https://cdn.discordapp.com/attachments/1497988409552015460/1497997880504487967/IMG_0471.png?ex=6a259c3e&is=6a244abe&hm=a84fe80b68af9fcfc13d962bd68a8a155151dde49a35739fc6c5e64d9d02909c&"
+      alt="Brasão Família Obolivon"
+      draggable="false"
+    />
+  </div>
+  <h1 class="clan-title">Família Obolivon</h1>
+  <p class="clan-subtitle">Recrutamento Oficial</p>
+  <div class="rune-deco">ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ</div>
+</header>
 
-        <div id="screen-assessment" class="card">
-            <h2>Formulário de Avaliação</h2>
-            <p>Responda às 10 perguntas abaixo. Lembre-se: é proibido copiar e colar respostas ou utilizar atalhos do sistema.</p>
-            <form id="form-assessment" onsubmit="submitAssessment(event)">
-                <div id="questions-container">
-                    </div>
-                <button type="submit" class="btn btn-success btn-block" style="margin-top: 30px; font-size: 18px;">Enviar Respostas</button>
-            </form>
-        </div>
+<!-- TABS -->
+<div class="tab-container">
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="switchTab('form')">⚔ Preencher Formulário</button>
+    <button class="tab-btn" onclick="switchTab('status')">🛡 Consultar Meu Status</button>
+  </div>
 
-        <div id="screen-success" class="card text-center">
-            <h2 style="color: var(--success);">Avaliação Enviada!</h2>
-            <p>Suas respostas foram salvas com sucesso. Aguarde o retorno do recrutador.</p>
-            <button class="btn" onclick="window.location.reload()">Voltar ao Início</button>
-        </div>
+  <!-- ───────────── TAB: STATUS ───────────── -->
+  <div class="card active" id="tab-status" style="display:none;">
+    <div class="section-title"><span class="icon">🔍</span> Consulta de Status</div>
+    <p style="color:var(--parchment-dim); font-size:0.9rem; margin-bottom:20px; line-height:1.8;">
+      Digite seu E-mail cadastrado ou ID do Discord para verificar o resultado da sua candidatura.
+    </p>
+    <div class="field-group">
+      <label>E-mail ou ID do Discord</label>
+      <input type="text" id="statusSearch" placeholder="seu@email.com  ou  Usuario#1234" style="-webkit-user-select:text;user-select:text;">
+    </div>
+    <button class="btn-primary" onclick="consultarStatus()">⚔ CONSULTAR STATUS</button>
 
-        <div id="screen-admin-login" class="card">
-            <h2>Acesso Restrito</h2>
-            <p>Insira a senha do administrador para visualizar os resultados.</p>
-            <form onsubmit="adminLogin(event)">
-                <div class="form-group">
-                    <label>Senha:</label>
-                    <input type="password" id="admin-password" required>
-                </div>
-                <button type="submit" class="btn btn-block">Acessar Painel</button>
-                <button type="button" class="btn btn-outline btn-block" onclick="showScreen('screen-home')">Voltar</button>
-                <p id="admin-error" style="color: var(--danger); margin-top: 10px; display: none;">Senha incorreta.</p>
-            </form>
-        </div>
+    <!-- Resultado -->
+    <div class="status-card" id="statusResult">
+      <div class="status-icon" id="statusIcon"></div>
+      <div class="status-label" id="statusLabel"></div>
+      <div class="status-score" id="statusScore"></div>
+      <div class="status-note" id="statusNote"></div>
+    </div>
+  </div>
 
-        <div id="screen-admin-dashboard" class="card">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                <h2>Painel do Administrador</h2>
-                <button class="btn btn-outline btn-sm" onclick="logoutAdmin()">Sair</button>
-            </div>
-            
-            <div class="table-responsive">
-                <table id="admin-table">
-                    <thead>
-                        <tr>
-                            <th>Candidato</th>
-                            <th>E-mail</th>
-                            <th>Status</th>
-                            <th>Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-tbody">
-                        </tbody>
-                </table>
-            </div>
-            <p id="no-data-msg" style="text-align: center; margin-top: 20px; color: var(--text-light); display: none;">Nenhuma avaliação enviada ainda.</p>
-        </div>
+  <!-- ───────────── TAB: FORM ───────────── -->
+  <div class="card active" id="tab-form">
+    <div class="disclaimer">
+      ⚠ Este formulário é de uso único. Respostas cuidadosas e honestas são esperadas de todo aspirante à Família Obolivon. Falsificações ou uso de IA resultam em desclassificação imediata.
     </div>
 
-    <div id="anti-cheat-modal" class="modal-overlay">
-        <div class="modal-content">
-            <div class="modal-icon">⚠️</div>
-            <h3 style="color: var(--danger);">Ação Bloqueada!</h3>
-            <p>Digite sua resposta manualmente para garantir a autenticidade do teste. Uso de copiar/colar, seleções e atalhos estão desativados.</p>
-            <button class="btn btn-danger" onclick="closeAntiCheatModal()" style="margin-top: 15px;">Entendi</button>
-        </div>
+    <!-- P1: Nome -->
+    <div class="field-group">
+      <div class="q-num">PERGUNTA 1 — IDENTIDADE</div>
+      <label>Nome Completo <span class="req">*</span></label>
+      <input type="text" id="q1_nome" placeholder="Seu nome completo" maxlength="120" autocomplete="off">
     </div>
 
-    <script>
-        /* ==========================================================================
-           BANCO DE QUESTÕES
-           ========================================================================== */
-        const questions = [
-            {
-                id: 'q1',
-                type: 'discursive',
-                text: "Como você deve responder à pergunta: 'Qual é o seu maior defeito?'"
-            },
-            {
-                id: 'q2',
-                type: 'multiple',
-                text: "Se o recrutador perguntar por que você saiu do seu último emprego, o que NUNCA deve ser dito?",
-                options: [
-                    "A) Estava em busca de novos desafios e plano de carreira.",
-                    "B) Fui afetado por uma reestruturação geral na empresa.",
-                    "C) Meu antigo chefe era incompetente e a empresa não prestava.",
-                    "D) A cultura da empresa não estava alinhada com meus objetivos profissionais."
-                ]
-            },
-            {
-                id: 'q3',
-                type: 'discursive',
-                text: "Qual a postura ideal de vestimenta e linguagem corporal em uma entrevista online?"
-            },
-            {
-                id: 'q4',
-                type: 'multiple',
-                text: "Qual a melhor forma de encerrar uma entrevista de emprego?",
-                options: [
-                    "A) Levantar rapidamente e sair assim que o recrutador parar de falar.",
-                    "B) Agradecer pela oportunidade, fazer perguntas pertinentes e alinhar os próximos passos.",
-                    "C) Perguntar imediatamente qual será o salário e os dias de férias.",
-                    "D) Pedir um feedback imediato se passou ou não."
-                ]
-            },
-            {
-                id: 'q5',
-                type: 'discursive',
-                text: "Explique por que fazer perguntas ao recrutador no final da entrevista demonstra interesse e preparo."
-            },
-            {
-                id: 'q6',
-                type: 'multiple',
-                text: "Como você deve se preparar no dia anterior à entrevista?",
-                options: [
-                    "A) Pesquisar sobre a empresa, reler o currículo e estudar as exigências da vaga.",
-                    "B) Improvisar completamente para parecer mais natural e espontâneo.",
-                    "C) Apenas imprimir várias cópias do currículo e não ler nada.",
-                    "D) Mandar mensagem nas redes sociais pessoais do recrutador para se destacar."
-                ]
-            },
-            {
-                id: 'q7',
-                type: 'discursive',
-                text: "Descreva como você lidaria se percebesse que não sabe a resposta para uma pergunta técnica durante a entrevista."
-            },
-            {
-                id: 'q8',
-                type: 'multiple',
-                text: "Ao ser questionado sobre suas conquistas passadas, qual técnica de resposta é a mais recomendada?",
-                options: [
-                    "A) Método Improviso Geral.",
-                    "B) Método STAR (Situação, Tarefa, Ação, Resultado).",
-                    "C) Contar a história focando apenas no que a equipe fez, omitindo seu papel.",
-                    "D) Evitar falar de conquistas para não parecer arrogante."
-                ]
-            },
-            {
-                id: 'q9',
-                type: 'discursive',
-                text: "Como você articula uma falha ou erro do passado para que pareça uma oportunidade de aprendizado na visão do recrutador?"
-            },
-            {
-                id: 'q10',
-                type: 'multiple',
-                text: "Qual é o principal objetivo do recrutador ao perguntar: 'Onde você se vê em 5 anos?'",
-                options: [
-                    "A) Calcular a sua idade exata no futuro.",
-                    "B) Garantir que você não vai pedir aumento nesse período.",
-                    "C) Avaliar seu alinhamento a longo prazo com a empresa e suas ambições.",
-                    "D) Testar se você é capaz de prever o futuro do mercado."
-                ]
-            }
-        ];
+    <!-- P2: Idade -->
+    <div class="field-group">
+      <div class="q-num">PERGUNTA 2 — IDADE</div>
+      <label>Sua Idade <span class="req">*</span></label>
+      <input type="number" id="q2_idade" placeholder="Ex: 17" min="10" max="80">
+    </div>
 
-        /* ==========================================================================
-           LÓGICA DE ESTADO E ARMAZENAMENTO (LocalStorage)
-           ========================================================================== */
-        const DB_KEY = 'assessments_db';
-        let currentCandidate = { name: '', email: '' };
+    <!-- P3: Discord -->
+    <div class="field-group">
+      <div class="q-num">PERGUNTA 3 — DISCORD</div>
+      <label>ID do Discord <span class="req">*</span></label>
+      <input type="text" id="q3_discord" placeholder="Usuario#1234 ou @usuario" maxlength="100" autocomplete="off">
+    </div>
 
-        function getAssessments() {
-            return JSON.parse(localStorage.getItem(DB_KEY)) || [];
+    <!-- E-mail (para consulta) -->
+    <div class="field-group">
+      <label>E-mail (para consultar status depois) <span class="req">*</span></label>
+      <input type="email" id="q_email" placeholder="seu@email.com" autocomplete="off">
+    </div>
+
+    <div class="rune-divider">ᛏ ᚹ ᛖ ᛚ ᚡ ᛖ</div>
+
+    <!-- P4: Texto Gramatical de Alinhamento -->
+    <div class="field-group">
+      <div class="q-num">PERGUNTA 4 — TEXTO DE ALINHAMENTO (mín. 10 linhas)</div>
+      <label>Escreva sobre um valor essencial para um clã (Honra, Lealdade, etc.) <span class="req">*</span></label>
+      <textarea id="q4" class="anti-cola-field" placeholder="Disserte livremente sobre o valor que você considera mais essencial para a unidade de um clã..." rows="10"></textarea>
+      <div class="char-counter" id="c4">0 linhas | 0 caracteres</div>
+    </div>
+
+    <!-- P5 -->
+    <div class="field-group">
+      <div class="q-num">PERGUNTA 5 — HIERARQUIA</div>
+      <label>Como reagiria a uma ordem de um superior que considera injusta? <span class="req">*</span></label>
+      <textarea id="q5" class="anti-cola-field" placeholder="Descreva sua postura com honestidade..." rows="7"></textarea>
+      <div class="char-counter" id="c5">0 caracteres</div>
+    </div>
+
+    <!-- P6 -->
+    <div class="field-group">
+      <div class="q-num">PERGUNTA 6 — CONFLITO INTERNO</div>
+      <label>Como agiria se outro membro o ofendesse publicamente no Discord? <span class="req">*</span></label>
+      <textarea id="q6" class="anti-cola-field" placeholder="Seja específico sobre como gerenciaria esse conflito..." rows="7"></textarea>
+      <div class="char-counter" id="c6">0 caracteres</div>
+    </div>
+
+    <!-- P7 -->
+    <div class="field-group">
+      <div class="q-num">PERGUNTA 7 — COMPROMISSO</div>
+      <label>Como pretende conciliar a vida pessoal com as obrigações do clã? <span class="req">*</span></label>
+      <textarea id="q7" class="anti-cola-field" placeholder="Fale sobre sua rotina, disponibilidade e comprometimento..." rows="7"></textarea>
+      <div class="char-counter" id="c7">0 caracteres</div>
+    </div>
+
+    <!-- P8 -->
+    <div class="field-group">
+      <div class="q-num">PERGUNTA 8 — HISTÓRICO</div>
+      <label>Já participou de outros clãs? Por que saiu? <span class="req">*</span></label>
+      <textarea id="q8" class="anti-cola-field" placeholder="Relate sua experiência anterior com honestidade..." rows="7"></textarea>
+      <div class="char-counter" id="c8">0 caracteres</div>
+    </div>
+
+    <!-- P9 -->
+    <div class="field-group">
+      <div class="q-num">PERGUNTA 9 — MOTIVAÇÃO</div>
+      <label>Por que deseja entrar na Família Obolivon? <span class="req">*</span></label>
+      <textarea id="q9" class="anti-cola-field" placeholder="Explique sua motivação real para fazer parte desta família..." rows="7"></textarea>
+      <div class="char-counter" id="c9">0 caracteres</div>
+    </div>
+
+    <!-- P10: Múltipla Escolha -->
+    <div class="field-group">
+      <div class="q-num">PERGUNTA 10 — COMPROMISSO FORMAL</div>
+      <label>Você se compromete a respeitar as regras e líderes da Família Obolivon? <span class="req">*</span></label>
+      <div class="radio-group">
+        <label class="radio-opt" id="opt-sim">
+          <input type="radio" name="q10" value="Sim" onchange="selectRadio('sim')"> ⚔ Sim, me comprometo
+        </label>
+        <label class="radio-opt" id="opt-nao">
+          <input type="radio" name="q10" value="Não" onchange="selectRadio('nao')"> ✖ Não
+        </label>
+      </div>
+    </div>
+
+    <div class="rune-divider">ᛗ ᛁ ᚦ ᚷ ᚨ ᚱ ᛞ</div>
+
+    <!-- P11: Redação -->
+    <div class="field-group">
+      <div class="q-num">PERGUNTA 11 — REDAÇÃO OBRIGATÓRIA (mín. 8 linhas)</div>
+      <label>
+        "O impacto do isolamento digital e a busca por pertencimento em comunidades virtuais na sociedade brasileira contemporânea" <span class="req">*</span>
+      </label>
+      <textarea id="q11" class="anti-cola-field" placeholder="Desenvolva sua mini-redação com introdução, desenvolvimento e conclusão. Mínimo de 8 linhas..." rows="12"></textarea>
+      <div class="char-counter" id="c11">0 linhas | 0 caracteres</div>
+    </div>
+
+    <!-- SUBMIT -->
+    <button class="btn-primary" id="submitBtn" onclick="submeterFormulario()">
+      ⚔ ENVIAR CANDIDATURA À FAMÍLIA OBOLIVON ⚔
+    </button>
+
+    <p style="text-align:center; color:var(--parchment-dim); font-size:0.75rem; margin-top:16px; font-family:'Cinzel',serif; letter-spacing:2px;">
+      AO ENVIAR, VOCÊ CONFIRMA QUE TODAS AS RESPOSTAS SÃO SUAS E ORIGINAIS
+    </p>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="toast"></div>
+
+<!-- LOADING -->
+<div id="overlay">
+  <div class="spinner"></div>
+  <p>ENVIANDO CANDIDATURA...</p>
+</div>
+
+<!-- ════════════════════════════════════════════
+     FIREBASE SDK via CDN (Compat version)
+════════════════════════════════════════════ -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+// ════════════════════════════════════════════════════════
+//  ⚠ COLE AQUI AS CREDENCIAIS DO SEU FIREBASE ⚠
+//  Substitua os valores abaixo pelas suas credenciais
+//  obtidas em: console.firebase.google.com
+// ════════════════════════════════════════════════════════
+const firebaseConfig = {
+  apiKey:            "AIzaSyBnCwQ8yVX52e_S1x1RTzbUDa-cl2345UE",
+  authDomain:        "famil-9a245.firebaseapp.com",
+  databaseURL:       "https://famil-9a245-default-rtdb.firebaseio.com",
+  projectId:         "famil-9a245",
+  storageBucket:     "famil-9a245.firebasestorage.app",
+  messagingSenderId: "220059680178",
+  appId:             "1:220059680178:web:40c7afa9a30caed5fcf8ab",
+  measurementId:     "G-KXDY5NX38B"
+};
+// ════════════════════════════════════════════════════════
+
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+// ── TAB SWITCH ──────────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => {
+    b.classList.toggle('active', (tab==='status' && i===1) || (tab==='form' && i===0));
+  });
+  document.getElementById('tab-form').style.display   = tab === 'form'   ? 'block' : 'none';
+  document.getElementById('tab-status').style.display = tab === 'status' ? 'block' : 'none';
+  document.getElementById('tab-form').classList.toggle('active', tab === 'form');
+  document.getElementById('tab-status').classList.toggle('active', tab === 'status');
+}
+
+// Init: show only form tab
+document.getElementById('tab-status').style.display = 'none';
+
+// ── RADIO ───────────────────────────────────────────────
+function selectRadio(v) {
+  document.getElementById('opt-sim').classList.toggle('selected', v==='sim');
+  document.getElementById('opt-nao').classList.toggle('selected', v==='nao');
+}
+
+// ── CHAR COUNTERS ────────────────────────────────────────
+function countLines(text) {
+  if (!text.trim()) return 0;
+  return text.split('\n').filter(l => l.trim().length > 0).length;
+}
+
+function updateCounter(fieldId, counterId, withLines) {
+  const el = document.getElementById(fieldId);
+  const cnt = document.getElementById(counterId);
+  if (!el || !cnt) return;
+  el.addEventListener('input', function() {
+    const chars = this.value.length;
+    if (withLines) {
+      const lines = countLines(this.value);
+      const minLines = fieldId === 'q4' ? 10 : 8;
+      const ok = lines >= minLines;
+      cnt.textContent = `${lines} linhas | ${chars} caracteres`;
+      cnt.className = 'char-counter ' + (chars === 0 ? '' : ok ? 'ok' : 'warn');
+    } else {
+      cnt.textContent = `${chars} caracteres`;
+      cnt.className = 'char-counter ' + (chars > 20 ? 'ok' : chars > 0 ? 'warn' : '');
+    }
+  });
+}
+
+updateCounter('q4',  'c4',  true);
+updateCounter('q11', 'c11', true);
+['q5','q6','q7','q8','q9'].forEach((id,i) =>
+  updateCounter(id, 'c'+(i+5), false)
+);
+
+// ── TOAST ────────────────────────────────────────────────
+function toast(msg, type='') {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'show ' + type;
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.className = '', 4000);
+}
+
+// ── OVERLAY ─────────────────────────────────────────────
+function showOverlay(show) {
+  document.getElementById('overlay').classList.toggle('show', show);
+}
+
+// ── STATUS QUERY ─────────────────────────────────────────
+async function consultarStatus() {
+  const val = document.getElementById('statusSearch').value.trim();
+  if (!val) { toast('Digite seu e-mail ou ID do Discord.', 'error'); return; }
+
+  showOverlay(true);
+  try {
+    // Busca por email
+    let snap = await db.collection('candidatos')
+      .where('email', '==', val).limit(1).get();
+    // Busca por discord se não achou
+    if (snap.empty) {
+      snap = await db.collection('candidatos')
+        .where('discord', '==', val).limit(1).get();
+    }
+
+    const card = document.getElementById('statusResult');
+    const icon  = document.getElementById('statusIcon');
+    const label = document.getElementById('statusLabel');
+    const score = document.getElementById('statusScore');
+    const note  = document.getElementById('statusNote');
+
+    if (snap.empty) {
+      card.className = 'status-card pending';
+      icon.textContent  = '🔎';
+      label.textContent = 'CANDIDATURA NÃO ENCONTRADA';
+      score.textContent = '';
+      note.textContent  = 'Verifique se o e-mail ou ID do Discord estão corretos.';
+      card.style.display = 'block';
+    } else {
+      const data = snap.docs[0].data();
+      const st = data.status || 'pending';
+      const nota = data.nota !== undefined ? data.nota : null;
+
+      if (st === 'aprovado') {
+        card.className     = 'status-card approved';
+        icon.textContent   = '⚔';
+        label.textContent  = 'APROVADO — BEM-VINDO À FAMÍLIA!';
+        score.textContent  = nota !== null ? `Nota: ${nota}/10` : '';
+        note.textContent   = 'Sua candidatura foi aprovada pela liderança. Aguarde o contato no Discord.';
+      } else if (st === 'reprovado') {
+        card.className     = 'status-card rejected';
+        icon.textContent   = '🛡';
+        label.textContent  = 'REPROVADO';
+        score.textContent  = nota !== null ? `Nota: ${nota}/10` : '';
+        note.textContent   = 'Infelizmente sua candidatura não foi aprovada desta vez.';
+      } else {
+        card.className     = 'status-card pending';
+        icon.textContent   = '⏳';
+        label.textContent  = 'EM ANÁLISE';
+        score.textContent  = '';
+        note.textContent   = 'Sua candidatura está sendo avaliada pela liderança. Aguarde.';
+      }
+      card.style.display = 'block';
+    }
+  } catch(e) {
+    toast('Erro ao consultar. Tente novamente.', 'error');
+    console.error(e);
+  } finally {
+    showOverlay(false);
+  }
+}
+
+// ── VALIDAÇÃO ────────────────────────────────────────────
+function validarFormulario() {
+  const erros = [];
+
+  if (!document.getElementById('q1_nome').value.trim())    erros.push('Nome Completo');
+  if (!document.getElementById('q2_idade').value.trim())   erros.push('Idade');
+  if (!document.getElementById('q3_discord').value.trim()) erros.push('ID do Discord');
+  if (!document.getElementById('q_email').value.trim())    erros.push('E-mail');
+
+  const q4text = document.getElementById('q4').value;
+  if (countLines(q4text) < 10) erros.push('Pergunta 4 (mínimo 10 linhas)');
+
+  ['q5','q6','q7','q8','q9'].forEach((id,i) => {
+    if (!document.getElementById(id).value.trim())
+      erros.push(`Pergunta ${i+5}`);
+  });
+
+  const q10 = document.querySelector('input[name="q10"]:checked');
+  if (!q10) erros.push('Pergunta 10 (Múltipla Escolha)');
+
+  const q11text = document.getElementById('q11').value;
+  if (countLines(q11text) < 8) erros.push('Pergunta 11 (mínimo 8 linhas)');
+
+  return erros;
+}
+
+// ── SUBMIT ───────────────────────────────────────────────
+async function submeterFormulario() {
+  const erros = validarFormulario();
+  if (erros.length > 0) {
+    toast(`⚠ Campos incompletos: ${erros.join(', ')}`, 'error');
+    return;
+  }
+
+  const q10val = document.querySelector('input[name="q10"]:checked').value;
+  const q11text = document.getElementById('q11').value;
+  const q4text  = document.getElementById('q4').value;
+
+  const payload = {
+    nome:    document.getElementById('q1_nome').value.trim(),
+    idade:   document.getElementById('q2_idade').value.trim(),
+    discord: document.getElementById('q3_discord').value.trim(),
+    email:   document.getElementById('q_email').value.trim(),
+    q4_alinhamento: { texto: q4text, linhas: countLines(q4text), chars: q4text.length },
+    q5_ordem_injusta:    document.getElementById('q5').value.trim(),
+    q6_ofensa_publica:   document.getElementById('q6').value.trim(),
+    q7_vida_pessoal:     document.getElementById('q7').value.trim(),
+    q8_historico_claos:  document.getElementById('q8').value.trim(),
+    q9_motivacao:        document.getElementById('q9').value.trim(),
+    q10_compromisso:     q10val,
+    q11_redacao: { texto: q11text, linhas: countLines(q11text), chars: q11text.length },
+    status:    'pending',
+    nota:      null,
+    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  document.getElementById('submitBtn').disabled = true;
+  showOverlay(true);
+
+  try {
+    await db.collection('candidatos').add(payload);
+    toast('⚔ Candidatura enviada com sucesso! Aguarde a avaliação.', 'success');
+    // Limpar formulário
+    document.querySelectorAll('input[type="text"], input[type="email"], input[type="number"], textarea')
+      .forEach(el => el.value = '');
+    document.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+    document.querySelectorAll('.radio-opt').forEach(o => o.classList.remove('selected'));
+    document.querySelectorAll('.char-counter').forEach(c => c.textContent = '0 linhas | 0 caracteres');
+  } catch(e) {
+    toast('Erro ao enviar candidatura. Verifique sua conexão.', 'error');
+    console.error(e);
+    document.getElementById('submitBtn').disabled = false;
+  } finally {
+    showOverlay(false);
+  }
+}
+
+// ════════════════════════════════════════════════════════
+//  SISTEMA ANTI-COLA ULTRA AVANÇADO
+// ════════════════════════════════════════════════════════
+(function() {
+  // 1. Bloquear clique direito
+  document.addEventListener('contextmenu', e => e.preventDefault());
+
+  // 2. Bloquear seleção de texto (exceto inputs/textareas)
+  document.addEventListener('selectstart', function(e) {
+    const tag = e.target.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    e.preventDefault();
+  });
+
+  // 3. Bloquear Ctrl+C, Ctrl+V, Ctrl+X, Ctrl+A (fora de inputs permitidos)
+  document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey || e.metaKey) {
+      const key = e.key.toLowerCase();
+      if (['c','v','x','a'].includes(key)) {
+        // Permitir apenas Ctrl+A e Ctrl+C dentro de inputs simples
+        const tag = e.target.tagName;
+        if (tag === 'INPUT' && key !== 'v' && key !== 'x') return;
+        if (tag === 'TEXTAREA') {
+          e.preventDefault();
+          mostrarAlertaAntiCola();
+          return;
         }
+        if (tag !== 'INPUT' && tag !== 'TEXTAREA') e.preventDefault();
+      }
+    }
+  });
 
-        function saveAssessment(assessment) {
-            const data = getAssessments();
-            // Evita duplicidade se o email tentar enviar de novo (sobrescreve)
-            const existingIndex = data.findIndex(a => a.email === assessment.email);
-            if(existingIndex >= 0) {
-                data[existingIndex] = assessment;
-            } else {
-                data.push(assessment);
-            }
-            localStorage.setItem(DB_KEY, JSON.stringify(data));
-        }
+  // 4. Bloquear drag (para evitar arrastar texto)
+  document.addEventListener('dragstart', e => e.preventDefault());
+  document.addEventListener('drop',      e => e.preventDefault());
 
-        function updateAssessmentStatus(email, newStatus) {
-            const data = getAssessments();
-            const index = data.findIndex(a => a.email === email);
-            if(index >= 0) {
-                data[index].status = newStatus;
-                localStorage.setItem(DB_KEY, JSON.stringify(data));
-                loadAdminDashboard(); // Recarrega a tabela
-            }
-        }
+  // 5. Bloquear Long Press no mobile (contextmenu)
+  document.addEventListener('contextmenu', e => { e.preventDefault(); return false; }, { passive: false });
 
-        /* ==========================================================================
-           CONTROLE DE TELAS (UI)
-           ========================================================================== */
-        function showScreen(screenId) {
-            document.querySelectorAll('.card').forEach(card => {
-                card.classList.remove('active');
-            });
-            document.getElementById(screenId).classList.add('active');
-            window.scrollTo(0,0);
-        }
+  // 6. Desativar colar via touch (mobile)
+  document.addEventListener('touchstart', function(){}, { passive: true });
 
-        /* ==========================================================================
-           SISTEMA ANTI-COLA ULTRA ROBUSTO
-           ========================================================================== */
-        function triggerAntiCheatWarning() {
-            document.getElementById('anti-cheat-modal').classList.add('active');
-        }
+  // 7. ANTI-PASTE AVANÇADO: monitorar input brusco nos textareas
+  const LIMITE_CHARS = 3; // mais de 3 chars de uma vez = suspeito
+  const historicoVal = {};
 
-        function closeAntiCheatModal() {
-            document.getElementById('anti-cheat-modal').classList.remove('active');
-        }
+  function monitorarPaste(el) {
+    const id = el.id;
+    historicoVal[id] = '';
 
-        // 1. Bloqueio de Clique Direito (Menu de Contexto)
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-            triggerAntiCheatWarning();
-        });
+    el.addEventListener('paste', function(e) {
+      e.preventDefault();
+      mostrarAlertaAntiCola();
+    });
 
-        // 2. Bloqueio de Atalhos de Teclado (Ctrl+C, Ctrl+V, F12, etc)
-        document.addEventListener('keydown', function(e) {
-            // F12
-            if (e.key === 'F12') {
-                e.preventDefault();
-                triggerAntiCheatWarning();
-            }
-            // Ctrl/Cmd + C, V, X, U, P, S
-            if ((e.ctrlKey || e.metaKey) && ['c', 'v', 'x', 'u', 'p', 's'].includes(e.key.toLowerCase())) {
-                e.preventDefault();
-                triggerAntiCheatWarning();
-            }
-        });
+    el.addEventListener('beforeinput', function(e) {
+      // insertText com mais chars de uma vez = colagem
+      if (e.inputType === 'insertText' && e.data && e.data.length > LIMITE_CHARS) {
+        e.preventDefault();
+        mostrarAlertaAntiCola();
+      }
+      // insertFromPaste = colagem direta
+      if (e.inputType === 'insertFromPaste' ||
+          e.inputType === 'insertFromPasteAsQuotation') {
+        e.preventDefault();
+        mostrarAlertaAntiCola();
+      }
+    });
 
-        // 3. Monitoramento de Injeção de Texto (Teclado Mobile e Colar Forçado)
-        function applyAntiCheatToInput(inputElement) {
-            let previousValue = inputElement.value;
-            
-            inputElement.addEventListener('focus', function() {
-                previousValue = this.value;
-            });
+    el.addEventListener('input', function(e) {
+      const prev = historicoVal[id];
+      const curr = this.value;
+      // Detecta salto brusco de caracteres
+      const diff = curr.length - prev.length;
+      if (diff > LIMITE_CHARS) {
+        // Remove a parte colada (restaura valor anterior)
+        this.value = prev;
+        mostrarAlertaAntiCola();
+      } else {
+        historicoVal[id] = curr;
+      }
+    });
+  }
 
-            inputElement.addEventListener('input', function(e) {
-                // Se o texto aumentar mais de 2 caracteres instantaneamente, é cola/autocomplete injetado
-                if (this.value.length - previousValue.length > 2) {
-                    this.value = previousValue; // Reverte imediatamente
-                    triggerAntiCheatWarning();
-                } else {
-                    previousValue = this.value; // Atualiza se for digitação normal
-                }
-            });
-        }
+  document.querySelectorAll('.anti-cola-field').forEach(monitorarPaste);
 
-        /* ==========================================================================
-           FLUXO DO CANDIDATO
-           ========================================================================== */
-        function renderQuestions() {
-            const container = document.getElementById('questions-container');
-            container.innerHTML = '';
-
-            questions.forEach((q, index) => {
-                const qBlock = document.createElement('div');
-                qBlock.className = 'question-block';
-                
-                let html = `<h3>Questão ${index + 1}</h3><p>${q.text}</p>`;
-                
-                if (q.type === 'multiple') {
-                    html += `<div class="options-group">`;
-                    q.options.forEach((opt, optIdx) => {
-                        html += `
-                            <label>
-                                <input type="radio" name="${q.id}" value="${opt[0]}" required>
-                                ${opt}
-                            </label>
-                        `;
-                    });
-                    html += `</div>`;
-                } else {
-                    // Atributos base de anti-preenchimento
-                    html += `
-                        <textarea name="${q.id}" required 
-                            autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" 
-                            onpaste="return false;" ondrop="return false;"
-                            placeholder="Digite sua resposta detalhada aqui..."></textarea>
-                    `;
-                }
-                
-                qBlock.innerHTML = html;
-                container.appendChild(qBlock);
-            });
-
-            // Aplica regra de injeção aos textareas recém-criados
-            document.querySelectorAll('textarea').forEach(applyAntiCheatToInput);
-        }
-
-        function startAssessment(e) {
-            e.preventDefault();
-            currentCandidate.name = document.getElementById('cand-name').value.trim();
-            currentCandidate.email = document.getElementById('cand-email').value.trim();
-            
-            renderQuestions();
-            showScreen('screen-assessment');
-        }
-
-        function submitAssessment(e) {
-            e.preventDefault();
-            
-            const formData = new FormData(e.target);
-            const answers = [];
-            
-            questions.forEach(q => {
-                answers.push({
-                    questionId: q.id,
-                    questionText: q.text,
-                    answer: formData.get(q.id)
-                });
-            });
-
-            const assessment = {
-                name: currentCandidate.name,
-                email: currentCandidate.email,
-                date: new Date().toLocaleString('pt-BR'),
-                answers: answers,
-                status: 'pendente' // pendente, aprovado, reprovado
-            };
-
-            saveAssessment(assessment);
-            showScreen('screen-success');
-        }
-
-        /* ==========================================================================
-           FLUXO DO ADMINISTRADOR
-           ========================================================================== */
-        function adminLogin(e) {
-            e.preventDefault();
-            const pass = document.getElementById('admin-password').value;
-            if (pass === 'admin123') {
-                document.getElementById('admin-password').value = '';
-                document.getElementById('admin-error').style.display = 'none';
-                loadAdminDashboard();
-                showScreen('screen-admin-dashboard');
-            } else {
-                document.getElementById('admin-error').style.display = 'block';
-            }
-        }
-
-        function logoutAdmin() {
-            showScreen('screen-home');
-        }
-
-        function toggleAnswerDetails(emailId) {
-            const el = document.getElementById('details-' + emailId);
-            if(el.style.display === 'block') {
-                el.style.display = 'none';
-            } else {
-                el.style.display = 'block';
-            }
-        }
-
-        function loadAdminDashboard() {
-            const data = getAssessments();
-            const tbody = document.getElementById('admin-tbody');
-            const noDataMsg = document.getElementById('no-data-msg');
-            const table = document.getElementById('admin-table');
-            
-            tbody.innerHTML = '';
-
-            if (data.length === 0) {
-                table.style.display = 'none';
-                noDataMsg.style.display = 'block';
-                return;
-            }
-
-            table.style.display = 'table';
-            noDataMsg.style.display = 'none';
-
-            data.forEach((item, index) => {
-                const tr = document.createElement('tr');
-                const safeEmailId = item.email.replace(/[^a-zA-Z0-9]/g, ''); // Para ID seguro
-                
-                // Formatação do Status
-                let statusClass = 'status-pendente';
-                let statusLabel = 'Pendente';
-                if(item.status === 'aprovado') { statusClass = 'status-aprovado'; statusLabel = 'Aprovado'; }
-                if(item.status === 'reprovado') { statusClass = 'status-reprovado'; statusLabel = 'Reprovado'; }
-
-                // Montagem das respostas para expansão
-                let answersHtml = `<div id="details-${safeEmailId}" class="answer-details">
-                                     <strong>Data de Envio:</strong> ${item.date}<br><br>`;
-                item.answers.forEach((ans, i) => {
-                    answersHtml += `<strong>Q${i+1}:</strong> ${ans.questionText}<br>
-                                    <span style="color:var(--primary-light)">R: ${ans.answer}</span><br><br>`;
-                });
-                answersHtml += `</div>`;
-
-                tr.innerHTML = `
-                    <td>
-                        <strong>${item.name}</strong><br>
-                        <button class="btn btn-outline btn-sm" style="margin-top:5px; padding: 2px 8px; font-size:12px;" onclick="toggleAnswerDetails('${safeEmailId}')">Ver Respostas</button>
-                        ${answersHtml}
-                    </td>
-                    <td>${item.email}</td>
-                    <td><span class="status-badge ${statusClass}">${statusLabel}</span></td>
-                    <td>
-                        <button class="btn btn-success btn-sm" onclick="updateAssessmentStatus('${item.email}', 'aprovado')">Aprovar</button>
-                        <button class="btn btn-danger btn-sm" onclick="updateAssessmentStatus('${item.email}', 'reprovado')">Reprovar</button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        // Aplica o monitor de input na tela de login de candidato também
-        document.addEventListener('DOMContentLoaded', () => {
-            applyAntiCheatToInput(document.getElementById('cand-name'));
-            applyAntiCheatToInput(document.getElementById('cand-email'));
-        });
-
-    </script>
+  function mostrarAlertaAntiCola() {
+    const banner = document.getElementById('antiColaAlert');
+    banner.classList.add('show');
+    setTimeout(() => banner.classList.remove('show'), 5000);
+  }
+})();
+</script>
 </body>
 </html>
