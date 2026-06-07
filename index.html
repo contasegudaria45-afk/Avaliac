@@ -206,6 +206,10 @@
     border-color: var(--gold);
     box-shadow: 0 0 12px rgba(156,122,60,0.2);
   }
+  input:disabled, textarea:disabled, select:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
   textarea { resize: vertical; min-height: 160px; }
   select { cursor: pointer; }
   select option { background: #1a1a1a; }
@@ -298,7 +302,7 @@
     transition: left 0.5s;
   }
   .btn-primary:hover::before { left: 100%; }
-  .btn-primary:hover {
+  .btn-primary:hover:not(:disabled) {
     background: linear-gradient(135deg, var(--crimson-light), var(--crimson));
     box-shadow: 0 0 20px rgba(139,26,26,0.5), 0 0 40px rgba(139,26,26,0.2);
     transform: translateY(-1px);
@@ -596,6 +600,11 @@
   <h1 class="clan-title">Família Obolivon</h1>
   <p class="clan-subtitle">Recrutamento Oficial</p>
   <div class="rune-deco">ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᚷ</div>
+
+  <div id="countdownDisplay" style="display:none; text-align:center; font-family:'Cinzel', serif; color:var(--gold-light); margin-top:20px; font-size:0.85rem; letter-spacing:2px; line-height:1.6;">
+    <span style="opacity: 0.8;">⚔ Encerramento do recrutamento em:</span><br>
+    <div id="countdownTimer" style="font-weight:bold; color:var(--parchment); font-size: 1rem; margin-top: 6px;"></div>
+  </div>
 </header>
 
 <div class="tab-container">
@@ -624,108 +633,120 @@
   </div>
 
   <div class="card active" id="tab-form">
-    <div class="disclaimer">
-      ⚠ Este formulário é de uso único. Respostas cuidadosas e honestas são esperadas de todo aspirante à Família Obolivon. Falsificações ou uso de IA resultam em desclassificação imediata.
+    
+    <div id="closedMessage" style="display:none; text-align:center; padding: 40px 10px;">
+      <div style="font-size:3.5rem; margin-bottom:16px; opacity: 0.9;">⚠</div>
+      <h2 style="font-family:'Cinzel', serif; color:var(--crimson-glow); letter-spacing:3px; font-size: 1.4rem;">RECRUTAMENTO ENCERRADO</h2>
+      <p style="color:var(--parchment-dim); margin-top:16px; line-height:1.6; font-size: 0.9rem;">
+        O período de inscrições para a Família Obolivon foi finalizado.<br><br>
+        Aguarde a abertura de um novo recrutamento.
+      </p>
     </div>
 
-    <div class="field-group">
-      <div class="q-num">PERGUNTA 1 — IDENTIDADE</div>
-      <label>Nome Completo <span class="req">*</span></label>
-      <input type="text" id="q1_nome" placeholder="Seu nome completo" maxlength="120" autocomplete="off">
-    </div>
-
-    <div class="field-group">
-      <div class="q-num">PERGUNTA 2 — IDADE</div>
-      <label>Sua Idade <span class="req">*</span></label>
-      <input type="number" id="q2_idade" placeholder="Ex: 17" min="10" max="80">
-    </div>
-
-    <div class="field-group">
-      <div class="q-num">PERGUNTA 3 — DISCORD</div>
-      <label>ID do Discord <span class="req">*</span></label>
-      <input type="text" id="q3_discord" placeholder="Usuario#1234 ou @usuario" maxlength="100" autocomplete="off">
-    </div>
-
-    <div class="field-group">
-      <label>E-mail (para consultar status depois) <span class="req">*</span></label>
-      <input type="email" id="q_email" placeholder="seu@email.com" autocomplete="off">
-    </div>
-
-    <div class="rune-divider">ᛏ ᚹ ᛖ ᛚ ᚡ ᛖ</div>
-
-    <div class="field-group">
-      <div class="q-num">PERGUNTA 4 — TEXTO DE ALINHAMENTO (mín. 10 linhas)</div>
-      <label>Escreva sobre um valor essencial para um clã (Honra, Lealdade, etc.) <span class="req">*</span></label>
-      <textarea id="q4" class="anti-cola-field" placeholder="Disserte livremente sobre o valor que você considera mais essencial para a unidade de um clã..." rows="10"></textarea>
-      <div class="char-counter" id="c4">0 linhas | 0 caracteres</div>
-    </div>
-
-    <div class="field-group">
-      <div class="q-num">PERGUNTA 5 — HIERARQUIA</div>
-      <label>Como reagiria a uma ordem de um superior que considera injusta? <span class="req">*</span></label>
-      <textarea id="q5" class="anti-cola-field" placeholder="Descreva sua postura com honestidade..." rows="7"></textarea>
-      <div class="char-counter" id="c5">0 caracteres</div>
-    </div>
-
-    <div class="field-group">
-      <div class="q-num">PERGUNTA 6 — CONFLITO INTERNO</div>
-      <label>Como agiria se outro membro o ofendesse publicamente no Discord? <span class="req">*</span></label>
-      <textarea id="q6" class="anti-cola-field" placeholder="Seja específico sobre como gerenciaria esse conflito..." rows="7"></textarea>
-      <div class="char-counter" id="c6">0 caracteres</div>
-    </div>
-
-    <div class="field-group">
-      <div class="q-num">PERGUNTA 7 — COMPROMISSO</div>
-      <label>Como pretende conciliar a vida pessoal com as obrigações do clã? <span class="req">*</span></label>
-      <textarea id="q7" class="anti-cola-field" placeholder="Fale sobre sua rotina, disponibilidade and comprometimento..." rows="7"></textarea>
-      <div class="char-counter" id="c7">0 caracteres</div>
-    </div>
-
-    <div class="field-group">
-      <div class="q-num">PERGUNTA 8 — HISTÓRICO</div>
-      <label>Já participou de outros clãs? Por que saiu? <span class="req">*</span></label>
-      <textarea id="q8" class="anti-cola-field" placeholder="Relate sua experiência anterior com honestidade..." rows="7"></textarea>
-      <div class="char-counter" id="c8">0 caracteres</div>
-    </div>
-
-    <div class="field-group">
-      <div class="q-num">PERGUNTA 9 — MOTIVAÇÃO</div>
-      <label>Por que deseja entrar na Família Obolivon? <span class="req">*</span></label>
-      <textarea id="q9" class="anti-cola-field" placeholder="Explique sua motivação real para fazer parte desta família..." rows="7"></textarea>
-      <div class="char-counter" id="c9">0 caracteres</div>
-    </div>
-
-    <div class="field-group">
-      <div class="q-num">PERGUNTA 10 — COMPROMISSO FORMAL</div>
-      <label>Você se compromete a respeitar as regras e líderes da Família Obolivon? <span class="req">*</span></label>
-      <div class="radio-group">
-        <label class="radio-opt" id="opt-sim">
-          <input type="radio" name="q10" value="Sim" onchange="selectRadio('sim')"> ⚔ Sim, me comprometo
-        </label>
-        <label class="radio-opt" id="opt-nao">
-          <input type="radio" name="q10" value="Não" onchange="selectRadio('nao')"> ✖ Não
-        </label>
+    <div id="formContent">
+      <div class="disclaimer">
+        ⚠ Este formulário é de uso único. Respostas cuidadosas e honestas são esperadas de todo aspirante à Família Obolivon. Falsificações ou uso de IA resultam em desclassificação imediata.
       </div>
+
+      <div class="field-group">
+        <div class="q-num">PERGUNTA 1 — IDENTIDADE</div>
+        <label>Nome Completo <span class="req">*</span></label>
+        <input type="text" id="q1_nome" placeholder="Seu nome completo" maxlength="120" autocomplete="off">
+      </div>
+
+      <div class="field-group">
+        <div class="q-num">PERGUNTA 2 — IDADE</div>
+        <label>Sua Idade <span class="req">*</span></label>
+        <input type="number" id="q2_idade" placeholder="Ex: 17" min="10" max="80">
+      </div>
+
+      <div class="field-group">
+        <div class="q-num">PERGUNTA 3 — DISCORD</div>
+        <label>ID do Discord <span class="req">*</span></label>
+        <input type="text" id="q3_discord" placeholder="Usuario#1234 ou @usuario" maxlength="100" autocomplete="off">
+      </div>
+
+      <div class="field-group">
+        <label>E-mail (para consultar status depois) <span class="req">*</span></label>
+        <input type="email" id="q_email" placeholder="seu@email.com" autocomplete="off">
+      </div>
+
+      <div class="rune-divider">ᛏ ᚹ ᛖ ᛚ ᚡ ᛖ</div>
+
+      <div class="field-group">
+        <div class="q-num">PERGUNTA 4 — TEXTO DE ALINHAMENTO (mín. 10 linhas)</div>
+        <label>Escreva sobre um valor essencial para um clã (Honra, Lealdade, etc.) <span class="req">*</span></label>
+        <textarea id="q4" class="anti-cola-field" placeholder="Disserte livremente sobre o valor que você considera mais essencial para a unidade de um clã..." rows="10"></textarea>
+        <div class="char-counter" id="c4">0 linhas | 0 caracteres</div>
+      </div>
+
+      <div class="field-group">
+        <div class="q-num">PERGUNTA 5 — HIERARQUIA</div>
+        <label>Como reagiria a uma ordem de um superior que considera injusta? <span class="req">*</span></label>
+        <textarea id="q5" class="anti-cola-field" placeholder="Descreva sua postura com honestidade..." rows="7"></textarea>
+        <div class="char-counter" id="c5">0 caracteres</div>
+      </div>
+
+      <div class="field-group">
+        <div class="q-num">PERGUNTA 6 — CONFLITO INTERNO</div>
+        <label>Como agiria se outro membro o ofendesse publicamente no Discord? <span class="req">*</span></label>
+        <textarea id="q6" class="anti-cola-field" placeholder="Seja específico sobre como gerenciaria esse conflito..." rows="7"></textarea>
+        <div class="char-counter" id="c6">0 caracteres</div>
+      </div>
+
+      <div class="field-group">
+        <div class="q-num">PERGUNTA 7 — COMPROMISSO</div>
+        <label>Como pretende conciliar a vida pessoal com as obrigações do clã? <span class="req">*</span></label>
+        <textarea id="q7" class="anti-cola-field" placeholder="Fale sobre sua rotina, disponibilidade and comprometimento..." rows="7"></textarea>
+        <div class="char-counter" id="c7">0 caracteres</div>
+      </div>
+
+      <div class="field-group">
+        <div class="q-num">PERGUNTA 8 — HISTÓRICO</div>
+        <label>Já participou de outros clãs? Por que saiu? <span class="req">*</span></label>
+        <textarea id="q8" class="anti-cola-field" placeholder="Relate sua experiência anterior com honestidade..." rows="7"></textarea>
+        <div class="char-counter" id="c8">0 caracteres</div>
+      </div>
+
+      <div class="field-group">
+        <div class="q-num">PERGUNTA 9 — MOTIVAÇÃO</div>
+        <label>Por que deseja entrar na Família Obolivon? <span class="req">*</span></label>
+        <textarea id="q9" class="anti-cola-field" placeholder="Explique sua motivação real para fazer parte desta família..." rows="7"></textarea>
+        <div class="char-counter" id="c9">0 caracteres</div>
+      </div>
+
+      <div class="field-group">
+        <div class="q-num">PERGUNTA 10 — COMPROMISSO FORMAL</div>
+        <label>Você se compromete a respeitar as regras e líderes da Família Obolivon? <span class="req">*</span></label>
+        <div class="radio-group">
+          <label class="radio-opt" id="opt-sim">
+            <input type="radio" name="q10" value="Sim" onchange="selectRadio('sim')"> ⚔ Sim, me comprometo
+          </label>
+          <label class="radio-opt" id="opt-nao">
+            <input type="radio" name="q10" value="Não" onchange="selectRadio('nao')"> ✖ Não
+          </label>
+        </div>
+      </div>
+
+      <div class="rune-divider">ᛗ ᛁ ᚦ ᚷ ᚨ ᚱ ᛞ</div>
+
+      <div class="field-group">
+        <div class="q-num">PERGUNTA 11 — REDAÇÃO OBRIGATÓRIA (mín. 8 linhas)</div>
+        <label>
+          "O impacto do isolamento digital e a busca por pertencimento em comunidades virtuais na sociedade brasileira contemporânea" <span class="req">*</span>
+        </label>
+        <textarea id="q11" class="anti-cola-field" placeholder="Desenvolva sua mini-redação com introdução, desenvolvimento e conclusão. Mínimo de 8 linhas..." rows="12"></textarea>
+        <div class="char-counter" id="c11">0 linhas | 0 caracteres</div>
+      </div>
+
+      <button class="btn-primary" id="submitBtn" onclick="submeterFormulario()">
+        ⚔ ENVIAR CANDIDATURA À FAMÍLIA OBOLIVON ⚔
+      </button>
+
+      <p style="text-align:center; color:var(--parchment-dim); font-size:0.75rem; margin-top:16px; font-family:'Cinzel',serif; letter-spacing:2px;">
+        AO ENVIAR, VOCÊ CONFIRMA QUE TODAS AS RESPOSTAS SÃO SUAS E ORIGINAIS
+      </p>
     </div>
-
-    <div class="rune-divider">ᛗ ᛁ ᚦ ᚷ ᚨ ᚱ ᛞ</div>
-
-    <div class="field-group">
-      <div class="q-num">PERGUNTA 11 — REDAÇÃO OBRIGATÓRIA (mín. 8 linhas)</div>
-      <label>
-        "O impacto do isolamento digital e a busca por pertencimento em comunidades virtuais na sociedade brasileira contemporânea" <span class="req">*</span>
-      </label>
-      <textarea id="q11" class="anti-cola-field" placeholder="Desenvolva sua mini-redação com introdução, desenvolvimento e conclusão. Mínimo de 8 linhas..." rows="12"></textarea>
-      <div class="char-counter" id="c11">0 linhas | 0 caracteres</div>
-    </div>
-
-    <button class="btn-primary" id="submitBtn" onclick="submeterFormulario()">
-      ⚔ ENVIAR CANDIDATURA À FAMÍLIA OBOLIVON ⚔
-    </button>
-
-    <p style="text-align:center; color:var(--parchment-dim); font-size:0.75rem; margin-top:16px; font-family:'Cinzel',serif; letter-spacing:2px;">
-      AO ENVIAR, VOCÊ CONFIRMA QUE TODAS AS RESPOSTAS SÃO SUAS E ORIGINAIS
-    </p>
   </div>
 </div>
 
@@ -766,6 +787,84 @@ const firebaseConfig = {
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database(); // Configurado para Realtime Database
+
+// ── LÓGICA DE CONTROLE DE RECRUTAMENTO (NOVO) ────────────
+let countdownInterval;
+
+db.ref('config').on('value', snap => {
+  const config = snap.val() || { formularioAberto: true, dataEncerramento: null };
+  avaliarStatusFormulario(config);
+});
+
+function avaliarStatusFormulario(config) {
+  const now = Date.now();
+  let isOpen = config.formularioAberto !== false; // Padrão é true se não existir
+  let deadline = config.dataEncerramento;
+
+  // Se tem data e ela já passou, fecha automaticamente
+  if (deadline && now >= deadline) {
+    isOpen = false;
+  }
+
+  const formContent = document.getElementById('formContent');
+  const closedMessage = document.getElementById('closedMessage');
+  const countdownDisplay = document.getElementById('countdownDisplay');
+  const submitBtn = document.getElementById('submitBtn');
+  const inputs = document.querySelectorAll('#formContent input, #formContent textarea');
+
+  if (!isOpen) {
+    formContent.style.display = 'none';
+    closedMessage.style.display = 'block';
+    countdownDisplay.style.display = 'none';
+    clearInterval(countdownInterval);
+    submitBtn.disabled = true;
+    inputs.forEach(el => el.disabled = true);
+  } else {
+    formContent.style.display = 'block';
+    closedMessage.style.display = 'none';
+    submitBtn.disabled = false;
+    inputs.forEach(el => el.disabled = false);
+
+    if (deadline) {
+      countdownDisplay.style.display = 'block';
+      iniciarContador(deadline);
+    } else {
+      countdownDisplay.style.display = 'none';
+      clearInterval(countdownInterval);
+    }
+  }
+}
+
+function iniciarContador(deadline) {
+  clearInterval(countdownInterval);
+  atualizarContador(deadline); // Chamada inicial
+  countdownInterval = setInterval(() => {
+    atualizarContador(deadline);
+  }, 1000);
+}
+
+function atualizarContador(deadline) {
+  const now = Date.now();
+  const diff = deadline - now;
+
+  if (diff <= 0) {
+    clearInterval(countdownInterval);
+    // Tempo acabou, fecha o form localmente até que o config sync
+    avaliarStatusFormulario({ formularioAberto: false, dataEncerramento: deadline });
+    return;
+  }
+
+  const dias = Math.floor(diff / (1000 * 60 * 60 * 24));
+  const horas = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+  const minutos = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+  const segundos = Math.floor((diff % (1000 * 60)) / 1000);
+
+  const formatado = (dias > 0 ? `${dias} dias<br>` : '') +
+                    `${horas} horas<br>${minutos} minutos<br>${segundos} segundos`;
+
+  document.getElementById('countdownTimer').innerHTML = formatado;
+}
+
 
 // ── TAB SWITCH ──────────────────────────────────────────
 function switchTab(tab) {
